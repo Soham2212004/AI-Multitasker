@@ -34,7 +34,7 @@ The AI Multitasker App is a Flutter application designed to integrate various AI
 
 ## Licence
 
-#### This project is licensed under the MIT License. See the LICENSE file for details.
+#### This project is licensed under the MIT License. See the [LICENSE](LICENCE) file for details.
 
 ## Contact
 #### For any inquiries or support, please contact [Soham Soni](sonisoham91@gmail.com).
