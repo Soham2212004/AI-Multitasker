@@ -29,7 +29,7 @@ class _VoiceNoteScreenState extends State<VoiceNoteScreen> {
   String _correctedText = '';
   bool _showGeneratePdfButton = false;
 
-  static const apiKey = "AIzaSyDJWIj4RVANwvI6-PUKPob6EJGtKaLjIEc";
+  static const apiKey = "";
   final model = GenerativeModel(model: 'gemini-pro', apiKey: apiKey);
 
   @override
