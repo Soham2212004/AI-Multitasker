@@ -18,7 +18,7 @@ class CodeExplainer extends StatefulWidget {
 
 class _CodeExplainerState extends State<CodeExplainer> {
   TextEditingController _userInput = TextEditingController();
-  static const apiKey = "AIzaSyDJWIj4RVANwvI6-PUKPob6EJGtKaLjIEc";
+  static const apiKey = "";
 
   final model = GenerativeModel(model: 'gemini-pro', apiKey: apiKey);
   String _outputMessage = '';
