@@ -1,113 +1,85 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart'; 
-import 'settings.dart';
-import 'user.dart';
-import 'home_page.dart';
-import 'splash_screen.dart';
-
+import 'Home/splash_screen.dart';
 
 void main() {
-  runApp(AIMultitaskerApp());
+  runApp(
+    ProviderScope(
+      child: AIMultitaskerApp(),
+    ),
+  );
 }
-
-class AIMultitaskerApp extends StatelessWidget {
+class AIMultitaskerApp extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'AI Multitasker App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: SplashScreen(),
-    );
+  _AIMultitaskerAppState createState() => _AIMultitaskerAppState();
+
+  static _AIMultitaskerAppState? of(BuildContext context) {
+    return context.findAncestorStateOfType<_AIMultitaskerAppState>();
   }
 }
 
-class HomeScreen extends StatefulWidget {
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  int _page = 0;
-  String? _profileImagePath;
-  GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
-
-  final List<Widget> _pages = [];
+class _AIMultitaskerAppState extends State<AIMultitaskerApp> {
+  ThemeData _themeData = ThemeData.light();
 
   @override
   void initState() {
     super.initState();
-    _loadProfileImage();
-    _updateAppUsage(); // Load the profile image when the screen initializes
+    _loadThemePreference();
   }
 
-  Future<void> _loadProfileImage() async {
-    final prefs = await SharedPreferences.getInstance();
+  void _loadThemePreference() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isDarkMode = prefs.getBool('isDarkMode') ?? false;
     setState(() {
-      _profileImagePath = prefs.getString('profileImagePath');
+      _themeData = isDarkMode ? ThemeData.dark() : ThemeData.light();
     });
-
-    _pages.addAll([
-      HomePage(),
-      UserPage(
-        onProfileUpdated: _loadProfileImage, // Reload the image when profile is updated
-      ),
-      SettingsPage(),
-    ]);
   }
 
-    Future<void> _updateAppUsage() async {
-    final prefs = await SharedPreferences.getInstance();
-    final currentTime = DateTime.now().millisecondsSinceEpoch;
-
-    // Update the time spent on the previous app
-    String? previousApp = prefs.getString('currentApp');
-    if (previousApp != null) {
-      int? previousTime = prefs.getInt('$previousApp-time');
-      if (previousTime != null) {
-        int timeSpent = currentTime - previousTime;
-        int totalTime = prefs.getInt('$previousApp-totalTime') ?? 0;
-        await prefs.setInt('$previousApp-totalTime', totalTime + timeSpent);
-      }
-    }
-
-    // Set the current app and time
-    await prefs.setString('currentApp', 'HomePage'); // Replace 'HomePage' with the current page name
-    await prefs.setInt('HomePage-time', currentTime);
+  void setThemeData(ThemeData themeData) {
+    setState(() {
+      _themeData = themeData;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: CurvedNavigationBar(
-        key: _bottomNavigationKey,
-        backgroundColor: Colors.lightBlueAccent,
-        items: <Widget>[
-          Icon(Icons.home, size: 30),
-          _profileImagePath != null
-              ? CircleAvatar(
-                  radius: 15,
-                  backgroundImage: FileImage(File(_profileImagePath!)),
-                )
-              : Icon(Icons.account_circle_outlined, size: 30),
-          Icon(Icons.settings, size: 30),
+    bool isDarkMode = _themeData.brightness == Brightness.dark;
+
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Stack(
+        children: [
+          // Background GIF for dark mode
+          if (isDarkMode)
+            Positioned.fill(
+              child: Image.network(
+                'https://images.unsplash.com/photo-1550353127-b0da3aeaa0ca?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fGJsYWNrJTIwYW5kJTIwYmx1ZSUyMGJhY2tncm91bmR8ZW58MHx8MHx8fDA%3D',
+                fit: BoxFit.cover,
+              ),
+            ),
+          // The main app content
+          MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'AI Multitasker App',
+            theme: _themeData.copyWith(
+              scaffoldBackgroundColor: isDarkMode ? Colors.transparent : Colors.white,
+              appBarTheme: AppBarTheme(
+                color: Colors.transparent, // Transparent background for the AppBar
+                elevation: 0, // Removes the shadow under the AppBar
+                iconTheme: IconThemeData(
+                  color: isDarkMode ? Colors.white : Colors.black, // Adjust icon color based on theme
+                ),
+                titleTextStyle: TextStyle(
+                  color: isDarkMode ? Colors.white : Colors.black, // Adjust title color based on theme
+                  fontSize: 20,
+                ),
+              ),
+            ),
+            home: SplashScreen(),
+          ),
         ],
-        onTap: (index) {
-          setState(() {
-            _page = index;
-            _updateAppUsage();
-          });
-        },
       ),
-      body: _pages.isNotEmpty ? _pages[_page] : Center(child: CircularProgressIndicator()), // Add loading indicator for the first build
     );
   }
 }
-
-
