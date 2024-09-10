@@ -68,7 +68,7 @@ The **AI Multitasker App** is a Flutter application designed to integrate variou
 Each app within the AI Multitasker App is designed for ease of use. Simply provide the necessary input, and the AI will handle the rest, whether it’s generating content, translating text, or creating personalized plans in PDF format.
 
 ## Demo
-You can see each app's [Demo](Demo%20Videos)
+You can see each app's [Demo](https://drive.google.com/file/d/1oqcNUH_D9_lVTm_2uEhiQ7GrnMhRDg-p/view?usp=sharing)
 
 ## Licence
 
