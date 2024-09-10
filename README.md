@@ -2,7 +2,8 @@
 
 ## Overview
 
-The AI Multitasker App is a Flutter application designed to integrate various AI functionalities into a single platform. The app features a set of tools including a chat bot, code explainer, AI voice note, and AI assistant, all accessible through a user-friendly interface.
+The **AI Multitasker App** is a Flutter application designed to integrate various AI functionalities into a single platform. The app features a set of tools which uses Gemini API and all are accessible through a user-friendly interface.
+
 
 ## Features
 
