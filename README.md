@@ -75,6 +75,6 @@ You can see each app's [Demo](https://drive.google.com/file/d/1oqcNUH_D9_lVTm_2u
 #### This project is licensed under the MIT License. See the [MIT License](LICENSE) file for details.
 
 ## Contact
-#### For any inquiries or support, please contact [Soham Soni](sonisoham91@gmail.com).
+#### For Lib file or any inquiries , please contact [Soham Soni](sonisoham91@gmail.com).
 
 
